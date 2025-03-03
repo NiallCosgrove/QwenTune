@@ -1,0 +1,1370 @@
+{
+    "0.3": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 1.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.3
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.3
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.3
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.3,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740330575.359074,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    },
+    "0.4": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 1.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.4
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.4
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.4
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.4,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740330735.9293337,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    },
+    "0.5": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 1.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.5
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.5
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.5
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day.\n\nShe eats 3 for breakfast every morning: 16 - 3 = 13 eggs left.\n\nShe bakes muffins for her friends every day with 4 eggs: 13 - 4 = 9 eggs left.\n\nShe sells the remainder at $2 per egg: 9 * 2 = $18.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.5,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740330887.2395406,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    },
+    "0.6": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 1.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.6
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.6
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. So, total eggs: 16.\n\nShe eats 3 eggs for breakfast every morning: 3 * 1 (since each breakfast is 1 egg) = 3.\n\nShe bakes muffins for her friends every day with 4 eggs: 4.\n\nSo, she uses 3 + 4 = 7 eggs for breakfast and baking.\n\nShe sells the remaining eggs: 16 - 7 = 9.\n\nShe sells each egg for $2: 9 * 2 = $18.\n\nSo, she makes $18 every day at the farmers' market.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.6
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. So, total eggs: 16.\n\nShe eats 3 eggs for breakfast every morning: 3 * 1 (since each breakfast is 1 egg) = 3.\n\nShe bakes muffins for her friends every day with 4 eggs: 4.\n\nSo, she uses 3 + 4 = 7 eggs for breakfast and baking.\n\nShe sells the remaining eggs: 16 - 7 = 9.\n\nShe sells each egg for $2: 9 * 2 = $18.\n\nSo, she makes $18 every day at the farmers' market.\n\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.6,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740331047.0838058,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    },
+    "0.7": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 1.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.7
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.7
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. She eats 3 for breakfast every morning, so that's 3 eggs/day. She eats 4 eggs for her friends every day, so 4 eggs/day. In total, she eats 3 + 4 = 7 eggs/day.\nShe has 16 eggs, so she sells 16 - 7 = 9 eggs. Each egg is sold for $2, so she makes 9 * 2 = $18.\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.7
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. She eats 3 for breakfast every morning, so that's 3 eggs/day. She eats 4 eggs for her friends every day, so 4 eggs/day. In total, she eats 3 + 4 = 7 eggs/day.\nShe has 16 eggs, so she sells 16 - 7 = 9 eggs. Each egg is sold for $2, so she makes 9 * 2 = $18.\n#### 18\n\n"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "18"
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.7,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740331230.4137726,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    },
+    "0.8": {
+        "results": {
+            "gsm8k": {
+                "alias": "gsm8k",
+                "exact_match,strict-match": 0.0,
+                "exact_match_stderr,strict-match": "N/A",
+                "exact_match,flexible-extract": 1.0,
+                "exact_match_stderr,flexible-extract": "N/A"
+            }
+        },
+        "group_subtasks": {
+            "gsm8k": []
+        },
+        "configs": {
+            "gsm8k": {
+                "task": "gsm8k",
+                "tag": [
+                    "math_word_problems"
+                ],
+                "dataset_path": "gsm8k",
+                "dataset_name": "main",
+                "training_split": "train",
+                "test_split": "test",
+                "fewshot_split": "train",
+                "doc_to_text": "Question: {{question}}\nAnswer:",
+                "doc_to_target": "{{answer}}",
+                "description": "",
+                "target_delimiter": " ",
+                "fewshot_delimiter": "\n\n",
+                "num_fewshot": 1,
+                "metric_list": [
+                    {
+                        "metric": "exact_match",
+                        "aggregation": "mean",
+                        "higher_is_better": true,
+                        "ignore_case": true,
+                        "ignore_punctuation": false,
+                        "regexes_to_ignore": [
+                            ",",
+                            "\\$",
+                            "(?s).*#### ",
+                            "\\.$"
+                        ]
+                    }
+                ],
+                "output_type": "generate_until",
+                "generation_kwargs": {
+                    "until": [
+                        "Question:",
+                        "</s>",
+                        "<|im_end|>"
+                    ],
+                    "do_sample": true,
+                    "temperature": 0.8
+                },
+                "repeats": 1,
+                "filter_list": [
+                    {
+                        "name": "strict-match",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "regex_pattern": "#### (\\-?[0-9\\.\\,]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "flexible-extract",
+                        "filter": [
+                            {
+                                "function": "regex",
+                                "group_select": -1,
+                                "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                            },
+                            {
+                                "function": "take_first"
+                            }
+                        ]
+                    }
+                ],
+                "should_decontaminate": false,
+                "metadata": {
+                    "version": 3.0
+                }
+            }
+        },
+        "versions": {
+            "gsm8k": 3.0
+        },
+        "n-shot": {
+            "gsm8k": 1
+        },
+        "higher_is_better": {
+            "gsm8k": {
+                "exact_match": true
+            }
+        },
+        "n-samples": {
+            "gsm8k": {
+                "original": 1319,
+                "effective": 1
+            }
+        },
+        "samples": {
+            "gsm8k": [
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.8
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. She eats 3 for breakfast every morning, so that\u2019s 7 days? Wait, no, it's every morning, which is 6 times a day? Wait, morning is 7 times a day? Wait, no, the question says she eats three for breakfast every morning. So, 24 times per day? No, she eats three for breakfast every morning, meaning every morning she eats 3 eggs. So in a day, she has breakfast 7 times. Wait, no, every day, there is a morning, so she eats 3 eggs every day. So in total, she eats 3 eggs per day for breakfast.\n\nThen, she bakes muffins for her friends every day with four. So, she uses 4 eggs per day for baking.\n\nTherefore, she uses a total of 3 + 4 = 7 eggs per day.\n\nBut the ducks lay 16 eggs per day. So, she sells 16 - 7 = 9 eggs.\n\nEach fresh egg is sold for $2, so she makes 9 * 2 = $18.\n\nSo, the answer is $18.\n\nWait, but let me double-check.\n\nShe"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "[invalid]"
+                    ],
+                    "filter": "strict-match",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 0.0
+                },
+                {
+                    "doc_id": 0,
+                    "doc": {
+                        "question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
+                        "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"
+                    },
+                    "target": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18",
+                    "arguments": [
+                        [
+                            "Question: Jen and Tyler are gymnasts practicing flips. Jen is practicing the triple-flip while Tyler is practicing the double-flip. Jen did sixteen triple-flips during practice. Tyler flipped in the air half the number of times Jen did. How many double-flips did Tyler do?\nAnswer: Jen did 16 triple-flips, so she did 16 * 3 = <<16*3=48>>48 flips.\nTyler did half the number of flips, so he did 48 / 2 = <<48/2=24>>24 flips.\nA double flip has two flips, so Tyler did 24 / 2 = <<24/2=12>>12 double-flips.\n#### 12\n\nQuestion: Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\nAnswer:",
+                            {
+                                "until": [
+                                    "Question:",
+                                    "</s>",
+                                    "<|im_end|>"
+                                ],
+                                "do_sample": true,
+                                "temperature": 0.8
+                            }
+                        ]
+                    ],
+                    "resps": [
+                        [
+                            " Janet\u2019s ducks lay 16 eggs per day. She eats 3 for breakfast every morning, so that\u2019s 7 days? Wait, no, it's every morning, which is 6 times a day? Wait, morning is 7 times a day? Wait, no, the question says she eats three for breakfast every morning. So, 24 times per day? No, she eats three for breakfast every morning, meaning every morning she eats 3 eggs. So in a day, she has breakfast 7 times. Wait, no, every day, there is a morning, so she eats 3 eggs every day. So in total, she eats 3 eggs per day for breakfast.\n\nThen, she bakes muffins for her friends every day with four. So, she uses 4 eggs per day for baking.\n\nTherefore, she uses a total of 3 + 4 = 7 eggs per day.\n\nBut the ducks lay 16 eggs per day. So, she sells 16 - 7 = 9 eggs.\n\nEach fresh egg is sold for $2, so she makes 9 * 2 = $18.\n\nSo, the answer is $18.\n\nWait, but let me double-check.\n\nShe"
+                        ]
+                    ],
+                    "filtered_resps": [
+                        "$18."
+                    ],
+                    "filter": "flexible-extract",
+                    "metrics": [
+                        "exact_match"
+                    ],
+                    "doc_hash": "986c19252f3c7f6eaeff2229e9a5777f96a85c0ceea931a92d2289084dfd518c",
+                    "prompt_hash": "357d90cb557d2c50c1d647a5f12db139dab06e0276a53010f808eb6fee0632b0",
+                    "target_hash": "623a0fbdf774fcb55e485a3e6b012e6c3965616af5b8eb9b9aebd2f6712be2eb",
+                    "exact_match": 1.0
+                }
+            ]
+        },
+        "config": {
+            "model": "./model-r1",
+            "model_args": null,
+            "model_num_parameters": 1777088000,
+            "model_dtype": "torch.bfloat16",
+            "model_revision": "main",
+            "model_sha": "",
+            "batch_size": null,
+            "batch_sizes": [],
+            "device": null,
+            "use_cache": null,
+            "limit": 1,
+            "bootstrap_iters": 100000,
+            "gen_kwargs": {
+                "temperature": 0.8,
+                "do_sample": true
+            },
+            "random_seed": 0,
+            "numpy_seed": 1234,
+            "torch_seed": 1234,
+            "fewshot_seed": 1234
+        },
+        "git_hash": null,
+        "date": 1740331386.299941,
+        "pretty_env_info": "PyTorch version: 2.6.0+cu124\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.5 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\nClang version: 14.0.0-1ubuntu1.1\nCMake version: version 3.26.3\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-5.15.74.2-microsoft-standard-WSL2+-x86_64-with-glibc2.35\nIs CUDA available: True\nCUDA runtime version: 12.3.107\nCUDA_MODULE_LOADING set to: LAZY\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 3080 Laptop GPU\nNvidia driver version: 572.16\ncuDNN version: Probably one of the following:\n/usr/lib/x86_64-linux-gnu/libcudnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_adv.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_precompiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_engines_runtime_compiled.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_graph.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_heuristic.so.9.7.1\n/usr/lib/x86_64-linux-gnu/libcudnn_ops.so.9.7.1\nHIP runtime version: N/A\nMIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                    x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   48 bits physical, 48 bits virtual\nByte Order:                      Little Endian\nCPU(s):                          16\nOn-line CPU(s) list:             0-15\nVendor ID:                       AuthenticAMD\nModel name:                      AMD Ryzen 7 6800HS with Radeon Graphics\nCPU family:                      25\nModel:                           68\nThread(s) per core:              2\nCore(s) per socket:              8\nSocket(s):                       1\nStepping:                        1\nBogoMIPS:                        6387.99\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid\nVirtualization:                  AMD-V\nHypervisor vendor:               Microsoft\nVirtualization type:             full\nL1d cache:                       256 KiB (8 instances)\nL1i cache:                       256 KiB (8 instances)\nL2 cache:                        4 MiB (8 instances)\nL3 cache:                        16 MiB (1 instance)\nNUMA node(s):                    1\nNUMA node0 CPU(s):               0-15\nVulnerability Itlb multihit:     Not affected\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Not affected\nVulnerability Retbleed:          Not affected\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Not affected\n\nVersions of relevant libraries:\n[pip3] exllamav2==0.2.7+cu121.torch2.4.1\n[pip3] mypy-extensions==1.0.0\n[pip3] numpy==1.26.4\n[pip3] nvidia-cublas-cu11==11.10.3.66\n[pip3] nvidia-cublas-cu12==12.4.5.8\n[pip3] nvidia-cuda-cupti-cu11==11.7.101\n[pip3] nvidia-cuda-cupti-cu12==12.4.127\n[pip3] nvidia-cuda-nvrtc-cu11==11.7.99\n[pip3] nvidia-cuda-nvrtc-cu12==12.4.127\n[pip3] nvidia-cuda-runtime-cu11==11.7.99\n[pip3] nvidia-cuda-runtime-cu12==12.4.127\n[pip3] nvidia-cudnn-cu11==8.5.0.96\n[pip3] nvidia-cudnn-cu12==9.1.0.70\n[pip3] nvidia-cufft-cu11==10.9.0.58\n[pip3] nvidia-cufft-cu12==11.2.1.3\n[pip3] nvidia-curand-cu11==10.2.10.91\n[pip3] nvidia-curand-cu12==10.3.5.147\n[pip3] nvidia-cusolver-cu11==11.4.0.1\n[pip3] nvidia-cusolver-cu12==11.6.1.9\n[pip3] nvidia-cusparse-cu11==11.7.4.91\n[pip3] nvidia-cusparse-cu12==12.3.1.170\n[pip3] nvidia-cusparselt-cu12==0.6.2\n[pip3] nvidia-nccl-cu11==2.14.3\n[pip3] nvidia-nccl-cu12==2.21.5\n[pip3] nvidia-nvjitlink-cu12==12.4.127\n[pip3] nvidia-nvtx-cu11==11.7.91\n[pip3] nvidia-nvtx-cu12==12.4.127\n[pip3] torch==2.6.0\n[pip3] torchaudio==2.5.1\n[pip3] torchvision==0.21.0\n[pip3] triton==3.2.0\n[conda] blas                      1.0                         mkl  \n[conda] cuda-cudart               11.8.89                       0    nvidia\n[conda] cuda-cupti                11.8.87                       0    nvidia\n[conda] cuda-libraries            11.8.0                        0    nvidia\n[conda] cuda-nvrtc                11.8.89                       0    nvidia\n[conda] cuda-nvtx                 11.8.86                       0    nvidia\n[conda] cuda-runtime              11.8.0                        0    nvidia\n[conda] cudatoolkit               11.8.0               h6a678d5_0  \n[conda] exllamav2                 0.2.7+cu121.torch2.4.1          pypi_0    pypi\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\n[conda] libcublas                 11.11.3.6                     0    nvidia\n[conda] libcufft                  10.9.0.58                     0    nvidia\n[conda] libcurand                 10.3.5.147                    0    nvidia\n[conda] libcusolver               11.4.1.48                     0    nvidia\n[conda] libcusparse               11.7.5.86                     0    nvidia\n[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch\n[conda] mkl                       2023.1.0         h213fc3f_46344  \n[conda] mkl-service               2.4.0           py310h5eee18b_2  \n[conda] mkl_fft                   1.3.11          py310h5eee18b_0  \n[conda] mkl_random                1.2.8           py310h1128e8f_0  \n[conda] numpy                     2.0.1           py310h5f9d8c6_1  \n[conda] numpy-base                2.0.1           py310hb5e798b_1  \n[conda] nvidia-cublas-cu12        12.4.5.8                 pypi_0    pypi\n[conda] nvidia-cuda-cupti-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-nvrtc-cu12    12.4.127                 pypi_0    pypi\n[conda] nvidia-cuda-runtime-cu12  12.4.127                 pypi_0    pypi\n[conda] nvidia-cufft-cu12         11.2.1.3                 pypi_0    pypi\n[conda] nvidia-curand-cu12        10.3.5.147               pypi_0    pypi\n[conda] nvidia-cusolver-cu12      11.6.1.9                 pypi_0    pypi\n[conda] nvidia-cusparse-cu12      12.3.1.170               pypi_0    pypi\n[conda] nvidia-nccl-cu12          2.21.5                   pypi_0    pypi\n[conda] nvidia-nvtx-cu12          12.4.127                 pypi_0    pypi\n[conda] pytorch-cuda              11.8                 h7e8668a_6    pytorch\n[conda] pytorch-mutex             1.0                        cuda    pytorch\n[conda] torch                     2.6.0                    pypi_0    pypi\n[conda] torchaudio                2.5.1               py310_cu118    pytorch\n[conda] torchvision               0.21.0                   pypi_0    pypi\n[conda] triton                    3.2.0                    pypi_0    pypi",
+        "transformers_version": "4.48.3",
+        "upper_git_hash": null,
+        "tokenizer_pad_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_eos_token": [
+            "<\uff5cend\u2581of\u2581sentence\uff5c>",
+            "151643"
+        ],
+        "tokenizer_bos_token": [
+            "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+            "151646"
+        ],
+        "eot_token_id": 151643,
+        "max_length": 131072
+    }
+}

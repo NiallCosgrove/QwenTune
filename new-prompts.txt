@@ -1,0 +1,10 @@
+Generate 5 diverse math problems with their correct answers in ChatML format.
+Generate 5 AI and machine learning-related questions with concise answers in ChatML format. Include one example that discusses the answer at length.
+Generate 5 programming-related questions and answers (e.g., Python, Bash, algorithms) in ChatML format.
+Generate 5 general knowledge questions with concise answers in ChatML format.
+Generate 5 logic puzzles with clear answers in ChatML format.
+Generate 5 multi-step reasoning questions with solutions in ChatML format. Include one example that explains the solution in detail.
+Generate 5 history-related questions with concise answers in ChatML format.
+Generate 5 geography questions with correct answers in ChatML format.
+Generate 5 science questions (biology, physics, chemistry) with concise answers in ChatML format.
+Generate 5 literature-related questions with correct answers in ChatML format.
